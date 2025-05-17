@@ -5,12 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "worker": "node worker.js"
+    "start": "concurrently -k \"node index.js\" \"node worker.js\"",
+    "dev": "concurrently -k \"nodemon index.js\" \"nodemon worker.js\""
   },
   "dependencies": {
     "amqplib": "^0.10.3",
+    "concurrently": "^9.1.2",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^8.3.2",
