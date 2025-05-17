@@ -22,7 +22,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+       url: process.env.SWAGGER_SERVER_URL || "http://localhost:5000",
       },
     ],
   },
