@@ -20,11 +20,14 @@ const router = Router();
  *             properties:
  *               userId:
  *                 type: string
+ *                 example: 68284a9f284eba457c65d0fb
  *               type:
  *                 type: string
  *                 enum: [email, sms, inapp]
+ *                 example: sms
  *               content:
  *                 type: string
+ *                 example: Hey! How are you?
  *     responses:
  *       201:
  *         description: Notification queued
@@ -43,6 +46,7 @@ router.post("/", sendNotification);
  *         name: id
  *         schema:
  *           type: string
+ *         example: 68284a9f284eba457c65d0fb
  *         required: true
  *         description: User ID
  *     responses:

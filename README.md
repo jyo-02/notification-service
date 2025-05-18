@@ -1,97 +1,129 @@
 # Notification Service
 
-A MERN backend microservice for handling notifications (email, SMS, in-app) using Node.js, Express, MongoDB, and RabbitMQ.
+A MERN backend microservice for handling notifications (**Email**, **SMS**, and **In-App**) using **Node.js**, **Express**, **MongoDB**, **RabbitMQ**, **Ethereal SMTP**, **Twilio**.
 
-## Features
+---
 
-- REST API to send and fetch notifications
-- Supports email, SMS, and in-app notifications
-- Uses RabbitMQ for job queueing and background processing
-- Modular code structure
-- Swagger documentation for API endpoints
+## 🚀 Features
 
-## Folder Structure
+* REST API to send and fetch notifications
+* Notification types:
+
+  * **Email** via [Ethereal](https://ethereal.email/)
+  * **SMS** via [Twilio](https://www.twilio.com/)
+  * **In-App** via a mocked Print to Console 
+* Background job processing with **RabbitMQ**
+* API documentation using **Swagger**
+
+---
+
+## 📦 Setup & Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone <repo-url>
+cd notification-service
+npm install
+```
+
+### 2. Configure Environment Variables
+
+Create `.env` with the appropriate values:
+
+```dotenv
+# Server
+PORT=5000
+
+# MongoDB
+MONGODB_URI=mongodb://localhost:27017/notifications
+
+# RabbitMQ
+RABBITMQ_URL=amqp://<user>:<pass>@<host>/<vhost>
+
+# Ethereal SMTP
+EMAIL_HOST=smtp.ethereal.email
+EMAIL_PORT=587
+EMAIL_USER=<your-ethereal-user>
+EMAIL_PASS=<your-ethereal-pass>
+
+# Twilio
+TWILIO_SID=<your-twilio-sid>
+TWILIO_AUTH_TOKEN=<your-twilio-auth-token>
+TWILIO_PHONE_NUMBER=+15551234567
 
 ```
-notification-service/
-├── config/
-├── controllers/
-├── models/
-├── queues/
-├── routes/
-├── services/
-├── index.js
-├── worker.js
-├── package.json
-├── .env.example
+
+### 3. Start Required Services
+
+Make sure **MongoDB** and **RabbitMQ** are running locally or on the cloud.
+
+### 4. Start the API Server
+
+```bash
+npm run dev
 ```
 
-## Setup & Installation
+The server will start at `http://localhost:5000`
 
-1. **Clone the repo and install dependencies:**
+### 5. Start the Worker Process
 
-   ```bash
-   cd notification-service
-   npm install
-   ```
+```bash
+npm run worker
+```
 
-2. **Copy and configure your environment variables:**
+---
 
-   ```bash
-   cp .env.example .env
-   # Edit .env with your MongoDB and RabbitMQ URIs
-   # Set SWAGGER_SERVER_URL to your deployed server URL for Swagger documentation
-   ```
+## 📘 API Documentation & Testing
 
-3. **Start MongoDB and RabbitMQ locally** (or use cloud URIs).
+You can test all available endpoints using the live Swagger UI:
 
-4. **Run the API server:**
+👉 **[https://notification-service-o6vf.onrender.com/api-docs/](https://notification-service-o6vf.onrender.com/api-docs/)**
 
-   ```bash
-   npm run dev
-   ```
+Use the following sample user ID to test:
 
-   The server runs on `http://localhost:5000` by default.
+```json
+{
+  "userId": "68284a9f284eba457c65d0fb"
+}
+```
 
-5. **Run the worker process (in a separate terminal):**
+---
 
-   ```bash
-   npm run worker
-   ```
+## 📡 API Endpoints
 
-6. **Access API Documentation:**
+### ✅ Send Notification
 
-   - The Swagger UI for API documentation is available at `/api-docs`.
-   - Ensure `SWAGGER_SERVER_URL` is set correctly in your environment for production deployments.
+* **POST** `/notifications`
 
-## Swagger Documentation
+**Sample Request Body:**
 
-- The API documentation is generated using Swagger and can be accessed at the `/api-docs` endpoint.
-- Ensure that the `SWAGGER_SERVER_URL` environment variable is set to the correct URL of your deployed server to reflect the accurate server URL in the documentation.
-- The documentation provides details on all available endpoints, request parameters, and response formats.
+```json
+{
+  "userId": "68284a9f284eba457c65d0fb",
+  "type": "sms",
+  "content": "Hello from Swagger!"
+}
+```
 
-## API Endpoints
+### 📥 Get Notifications for a User
 
-### Send Notification
+* **GET** `/notifications/users/{id}/notifications`
 
-- **POST** `/notifications`
-- **Body:**
-  ```json
-  {
-    "userId": "<user_id>",
-    "type": "email" | "sms" | "inapp",
-    "content": "Message content"
-  }
-  ```
+**Example Path Parameter:**
 
-### Get User Notifications
+```
+id = 68284a9f284eba457c65d0fb
+```
 
-- **GET** `/notifications/users/:id/notifications`
+---
 
-## Notes
+## 📝 Notes
 
-- Add users directly to the database (no registration endpoint included).
-- Notification sending real for sms and email and mocked for in-app (logs to console, random success/failure).
-- Ensure all environment variables are correctly set for production deployments.
+* **Email** notifications use [Ethereal](https://ethereal.email/) for testing. Use the Ethereal dashboard to view sent messages.
+* **SMS** notifications are sent using [Twilio](https://www.twilio.com/). Ensure your credentials are valid.
+* **In-App** notifications are mocked, printed to the console with simulated delay.
+* Users must be added directly to the database — no registration or login endpoints are included in this service.
+* For testing, use the sample `userId` provided above.
 
 ---
